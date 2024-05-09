@@ -1,5 +1,6 @@
 ﻿@page "/counter"
-@rendermode InteractiveWebAssembly
+@using System.Diagnostics
+@rendermode @(new InteractiveWebAssemblyRenderMode(prerender: false))
 
 <PageTitle>Counter</PageTitle>
 
@@ -11,6 +12,14 @@
 
 @code {
     private int currentCount = 0;
+
+    protected override void OnInitialized()
+    {
+        if (!OperatingSystem.IsBrowser())
+        {
+            throw new UnreachableException();
+        }
+    }
 
     private void IncrementCount()
     {
